@@ -9,7 +9,7 @@
           <h3>{{dish.name | uppercase}}</h3>
         </md-card-title>
       </md-card-header>
-      <img md-card-image src="{{dish.image}}" alt="{{dish.name}}">
+      <img md-card-image src="{{BaseURL + dish.image}}" alt="{{dish.name}}">
       <md-card-content>
         <p> {{dish.description }}</p>
       </md-card-content>
@@ -40,12 +40,44 @@
             <span> -- {{comm.author}} {{comm.date | date}}</span>
           </p>
         </md-list-item>
+        <md-list-item *ngIf="!commentForm.invalid">
+          <h1 md-line> {{commentPreview.comment}} </h1>
+          <p md-line>
+            <span> {{commentPreview.rating}} Stars </span>
+            <br/>
+            <span> -- {{commentPreview.author}} </span>
+          </p>
+        </md-list-item>
       </md-list>
     </p>
+    <form novalidate [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+      <p>
+        <md-input-container style="width: 100%">
+          <input mdInput formControlName="author" placeholder="Name" type="text" required>
+          <md-hint>
+            <span [hidden]="!(formErrors.author)">{{formErrors.author}}</span>
+          </md-hint>
+        </md-input-container>
+        <span md-line>
+          <md-slider formControlName="rating" min="1" max="5" step="1" value="5" thumbLabel tickInterval="1"></md-slider>
+        </span>
+        <md-input-container style="width: 100%">
+          <textarea mdInput formControlName="comment" placeholder="Your Comment" rows="9"></textarea>
+          <md-hint>
+            <span [hidden]="!(formErrors.comment)">{{formErrors.comment}}</span>
+          </md-hint>
+        </md-input-container>
+      </p>
+      <button type="submit" [disabled]="commentForm.invalid" md-button class="background-primary text-floral-white">Submit</button>
+    </form>
   </div>
-  <div [hidden]="dish">
+  <div [hidden]="dish || errMess">
     <md-spinner></md-spinner>
     <h4>Loading... Please wait</h4>
+  </div>
+  <div *ngIf="errMess">
+    <h2>Error</h2>
+    <h4>{{errMess}}</h4>
   </div>
 
 </div>
