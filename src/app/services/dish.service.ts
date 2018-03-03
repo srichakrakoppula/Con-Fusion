@@ -21,7 +21,8 @@ export class DishService {
   }
 
   getDish(id: number): Observable<Dish>{
-    return this.restangular.one('dishes',id);
+    console.log(this.restangular.one('dishes',id));
+    return this.restangular.one('dishes',id).get();
   }
 
   getFeaturedDish(): Observable<Dish>{
@@ -31,7 +32,6 @@ export class DishService {
 
   getDishIds(): Observable<number[]>{
     return this.getDishes()
-    .map(dishes=> {return dishes.map(dish => dish.id)})
-    .catch(error => { return Observable.of(error) });
+    .map(dishes=> {return  dishes.map(dish => dish.id)});
   }
 }
